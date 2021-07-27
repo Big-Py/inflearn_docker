@@ -1,0 +1,74 @@
+version: "3"
+services:
+   frontend:
+      build:
+        dockerfile: Dockerfile.dev
+        context: ./frontend
+      volumes:
+         - /app/node_modules
+         - ./frontend:/app
+      stdin_open: true
+      networks:
+         - mern-app
+
+   nginx:
+      restart: always
+      build:
+        dockerfile: Dockerfile
+        context: ./nginx
+      container_name: proxy_nginx
+      ports:
+         - "3000:80"
+      networks:
+         - mern-app
+
+   backend:
+      build:
+         dockerfile: Dockerfile.dev
+         context: ./backend
+      container_name: app_backend
+      volumes:
+         - /app/node_modules
+         - ./backend:/app
+      networks:
+         - mern-app
+      depends_on:
+         - mongodb
+
+   mongodb:
+      build: 
+         dockerfile: Dockerfile
+         context: ./mongodb
+      restart: unless-stopped
+      ports:
+         - "27017:27017"
+      networks:
+         - mern-app
+      volumes:
+         - mongo-data:/data/db
+    
+networks:
+   mern-app:
+      driver: bridge
+volumes:
+   mongo-data:
+      driver: local
+      
+
+   #  mysql:
+   #   build: 
+   #      dockerfile: Dockerfile
+   #      context: ./mysql
+   #   restart: unless-stopped
+   #      container_name: app_mysql
+   #   ports:
+   #      - "3306:3306"
+   #   volumes:
+   #      - ./mysql/mysql_data:/var/lib/mysql
+   #      - ./mysql/sqls:/docker-entrypoint-initdb.d
+   #   environment:
+   #      MYSQL_ROOT_PASSWORD: mysql1234!
+   #      MYSQL_DATABASE: myapp
+
+
+
