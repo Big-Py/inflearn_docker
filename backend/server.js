@@ -1,15 +1,28 @@
 //필요한 모듈들을 가져오기 
 const express = require("express");
 const bodyParser = require('body-parser');
-
+const cors = require('cors');
 const db = require('./db');
 
 //Express 서버를 생성
 const app = express();
 
+let memberSchema = require('./models/Members');
+
 // json 형대토 오는 요청의 본문을 해석해줄수있게 등록
 app.use(bodyParser.json());
 
+app.use(cors());
+
+app.use('/api', (req, res)=> {
+    memberSchema.find((error, data) => {
+      if (error) {
+        return next(error)
+      } else {
+        res.json(data);
+      }
+    })
+});
 // // 테이블 생성하기 
 // db.pool.query(`CREATE TABLE lists (
 //     id INTEGER AUTO_INCREMENT,
@@ -18,6 +31,7 @@ app.use(bodyParser.json());
 // )`, (err, results, fileds) => {
 //     console.log('results', results)
 // })
+
 
 //DB lists 테이블에 있는 모든 데이터를 프론트 서베에 보내주기 
 // app.get('/api/hi', function (req, res) {

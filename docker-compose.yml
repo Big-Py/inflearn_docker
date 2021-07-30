@@ -2,8 +2,9 @@ version: "3"
 services:
    frontend:
       build:
-        dockerfile: Dockerfile.dev
+        dockerfile: Dockerfile
         context: ./frontend
+      container_name: frontend
       volumes:
          - /app/node_modules
          - ./frontend:/app
@@ -26,7 +27,7 @@ services:
       build:
          dockerfile: Dockerfile.dev
          context: ./backend
-      container_name: app_backend
+      container_name: backend
       volumes:
          - /app/node_modules
          - ./backend:/app
@@ -40,6 +41,7 @@ services:
          dockerfile: Dockerfile
          context: ./mongodb
       restart: unless-stopped
+      container_name: mongodb
       ports:
          - "27017:27017"
       networks:

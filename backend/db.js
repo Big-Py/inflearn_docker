@@ -12,7 +12,7 @@
 
 const mongoose = require('mongoose');
 
-const connectionString = 'mongodb://mongodb:27017/admin';
+const connectionString = 'mongodb://mongodb:27017/dev_db_test?gssapiServiceName=mongodb&authSource=admin';
 
 mongoose.connect(connectionString, {
   useNewUrlParser: true,
