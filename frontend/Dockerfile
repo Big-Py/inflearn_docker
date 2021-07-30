@@ -1,9 +1,9 @@
 FROM node:alpine as builder 
 WORKDIR /app
-COPY ./package.josn ./
+COPY ./package.json ./
 RUN yarn install
 COPY . .
-RUN yarn builder
+RUN yarn build
 
 FROM nginx
 EXPOSE 3000
